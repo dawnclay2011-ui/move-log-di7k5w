@@ -1,0 +1,107 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Move Log"><meta name="theme-color" content="#e8eef5"><link rel="manifest" href="m-sl8vyope.webmanifest"><link rel="apple-touch-icon" href="icon.png">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Christian's Move Tracker</title>
+<style>
+*{box-sizing:border-box}body{font-family:Arial,sans-serif;font-size:16px;margin:0;background:#f7f9fc;color:#222}
+header{background:#e8eef5;border-bottom:1px solid #999;padding:14px 16px}h1{font-size:22px;margin:0}
+.s{color:#666;font-size:13px}main{padding:12px;max-width:520px;margin:auto}
+.card{background:#fff;border:1px solid #999;border-radius:8px;padding:12px;margin-bottom:12px}
+h2{font-size:17px;margin:0 0 8px;background:#e8eef5;margin:-12px -12px 10px;padding:8px 12px;border-bottom:1px solid #999;border-radius:8px 8px 0 0}
+label{display:block;font-size:14px;margin:8px 0 4px}
+input,textarea,select{width:100%;font-size:17px;padding:10px;border:1px solid #999;border-radius:6px}
+.row{display:flex;gap:8px}.row>div{flex:1}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{border:1px solid #999;background:#fff;border-radius:20px;padding:10px 14px;font-size:15px;min-height:44px}
+.chip.on{background:#2b5d8a;color:#fff;border-color:#2b5d8a}
+button.big{width:100%;min-height:52px;font-size:18px;font-weight:bold;border:0;border-radius:8px;background:#2b5d8a;color:#fff;margin-top:12px}
+button.alt{background:#e8eef5;color:#222;border:1px solid #999}
+table{width:100%;border-collapse:collapse;font-size:14px}td,th{border:1px solid #999;padding:6px;text-align:left}th{background:#e8eef5}
+.stats{display:flex;gap:8px;text-align:center}.stats div{flex:1;border:1px solid #999;border-radius:8px;padding:8px}.stats b{display:block;font-size:24px}
+.del{border:0;background:none;color:#a33;font-size:18px;min-width:36px;min-height:36px}
+#msg{text-align:center;font-weight:bold;color:#2b5d8a;min-height:20px;margin-top:8px}
+</style></head><body>
+<header><h1>Christian's Training Log</h1><div class="s">Your goals. Your records. Your call.</div></header><main>
+<div class="card"><h2>Log a move</h2>
+<label>Date</label><input type="date" id="d">
+<label>What did you do?</label><div class="chips" id="chips"></div>
+<input id="other" placeholder="What was it?" style="display:none;margin-top:6px">
+<div class="row"><div><label>Minutes</label><input id="m" type="number" inputmode="numeric" min="1"></div>
+<div><label>Steps (optional)</label><input id="st" type="number" inputmode="numeric" min="0"></div></div>
+<label>Push-ups done (optional)</label><input id="pu" type="number" inputmode="numeric" min="0">
+<label>Notes / how it felt (optional)</label><textarea id="n" rows="2" placeholder="optional"></textarea>
+<button class="big" id="save">Save it ✅</button><div id="msg"></div></div>
+<div class="card"><h2>Do it on my own</h2><div class="s">Start these yourself, anytime. No one has to ask.</div>
+<div class="chips" id="solo" style="margin-top:8px"></div>
+<label style="display:flex;gap:8px;align-items:center;margin-top:10px"><input type="checkbox" id="isSolo" style="width:24px;height:24px"> I did this one on my own</label>
+<div class="row"><div><label>My solo target</label><input id="sv" type="number" inputmode="numeric" min="1"></div><div><label>Per</label><select id="sp"><option value="day">minutes a day</option><option value="week">solo days a week</option></select></div></div>
+<button class="big alt" id="sset">Set my target</button>
+<div class="stats" style="margin-top:10px"><div><b id="ss">0</b>solo-day streak</div><div><b id="sw">0</b>solo days this week</div></div><div id="stx" style="margin-top:8px"></div></div>
+<div class="card"><h2>This week</h2><div class="stats"><div><b id="days">0</b>days moved</div><div><b id="mins">0</b>minutes</div><div><b id="streak">0</b>day streak</div></div>
+<div id="goalTxt" style="margin-top:10px"></div>
+<table style="margin-top:10px"><thead><tr><th>Day</th><th>Activity</th><th>Min</th><th></th></tr></thead><tbody id="list"></tbody></table></div>
+<div class="card"><h2>My weekly goal</h2><div class="s">You pick it. Small goals that you hit beat big ones you don't.</div>
+<div class="row"><div><label>Amount</label><input id="gv" type="number" inputmode="numeric" min="1"></div><div><label>Type</label><select id="gt"><option value="days">days</option><option value="minutes">minutes</option></select></div></div>
+<button class="big alt" id="gset">Set my goal</button></div>
+<div class="card"><h2>Push-up streak 💪</h2><div class="s">Optional. Even one push-up a day counts. Log push-ups above.</div>
+<div class="stats" style="margin-top:8px"><div><b id="pus">0</b>day streak</div><div><b id="puw">0</b>this week</div><div><b id="pub">0</b>best in one day</div></div></div>
+<div class="card"><h2>Personal bests 🏆</h2><div class="s">Only you vs. you. Add any record (e.g. "Mile walk", "12:40").</div>
+<div class="row"><div><label>Record</label><input id="pbn"></div><div><label>Result</label><input id="pbv"></div></div>
+<button class="big alt" id="pbadd">Add personal best</button>
+<table style="margin-top:10px"><thead><tr><th>Date</th><th>Record</th><th>Result</th><th></th></tr></thead><tbody id="pbl"></tbody></table></div>
+<div class="card"><h2>Send to Mom</h2><div class="s">Only sends what you logged. You pick who gets it.</div>
+<button class="big" id="sendW">Send my week 📤</button><button class="big alt" id="sendT">Send just today</button></div>
+<p class="s" style="text-align:center">Saved only on this phone. You own this log.</p>
+</main><script>
+const KEY="pe_tracker_christian",CHRIS=true,NAME="Christian";
+const ACTS=["Walk","Bike","Tennis","Hike","Push-ups","Stretching","Sports","Skating / stick & puck","Other"];
+const $=id=>document.getElementById(id);
+let S=JSON.parse(localStorage.getItem(KEY)||"null")||{e:[],goal:null,pb:[]},act=null;
+const save=()=>localStorage.setItem(KEY,JSON.stringify(S));
+const iso=d=>{const z=new Date(d);z.setMinutes(z.getMinutes()-z.getTimezoneOffset());return z.toISOString().slice(0,10)};
+const today=()=>iso(new Date());
+function weekStart(){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-((d.getDay()+6)%7));return iso(d)}
+const fmt=s=>new Date(s+"T12:00").toLocaleDateString(undefined,{weekday:"short",month:"numeric",day:"numeric"});
+$("d").value=today();
+ACTS.forEach(a=>{const b=document.createElement("button");b.className="chip";b.textContent=a;b.onclick=()=>{act=a;document.querySelectorAll(".chip").forEach(c=>c.classList.toggle("on",c===b));$("other").style.display=a==="Other"?"block":"none"};$("chips").appendChild(b)});
+function flash(t){$("msg").textContent=t;setTimeout(()=>$("msg").textContent="",3500)}
+const CHEERS=["Logged. That counts. ✅","Done and recorded. 💪","Another one in the books.","Saved. Nice work.","On the board. ✅"];
+$("save").onclick=()=>{const m=+$("m").value;if(!act){flash("Pick what you did first 👆");return}
+if(!(m>0)){flash("How many minutes? 👆");return}
+const e={id:Date.now(),d:$("d").value||today(),a:act==="Other"?($("other").value.trim()||"Other"):act,m,st:+$("st").value||null,n:$("n").value.trim()};
+e.solo=$("isSolo").checked;$("isSolo").checked=false;
+if(CHRIS&&$("pu")&&+$("pu").value>0)e.pu=+$("pu").value;
+S.e.push(e);save();["m","st","n","other"].forEach(i=>$(i).value="");if($("pu"))$("pu").value="";
+flash(CHEERS[Math.floor(Math.random()*CHEERS.length)]);render()};
+function streak(key){const days=new Set(S.e.filter(key||(()=>true)).map(e=>e.d));let n=0,d=new Date();if(!days.has(iso(d)))d.setDate(d.getDate()-1);while(days.has(iso(d))){n++;d.setDate(d.getDate()-1)}return n}
+function week(){const ws=weekStart();return S.e.filter(e=>e.d>=ws&&e.d<=today()).sort((a,b)=>a.d<b.d?-1:1)}
+function render(){const w=week();$("days").textContent=new Set(w.map(e=>e.d)).size;$("mins").textContent=w.reduce((s,e)=>s+e.m,0);$("streak").textContent=streak();
+$("list").innerHTML=w.length?"":'<tr><td colspan="4" class="s">Nothing yet this week. Your first move counts!</td></tr>';
+w.forEach(e=>{const tr=document.createElement("tr");tr.innerHTML=`<td>${fmt(e.d)}</td><td></td><td>${e.m}</td><td><button class="del" title="Remove">✕</button></td>`;tr.children[1].textContent=e.a+(e.pu?` (${e.pu} push-ups)`:"");tr.querySelector(".del").onclick=()=>{if(confirm("Remove this entry?")){S.e=S.e.filter(x=>x.id!==e.id);save();render()}};$("list").appendChild(tr)});
+renderSolo(w);if(CHRIS)renderC(w)}
+function report(onlyToday){const t=today(),list=onlyToday?S.e.filter(e=>e.d===t):week();
+let r=`${NAME}'s movement ${onlyToday?"today ("+fmt(t)+")":"this week (since "+fmt(weekStart())+")"}\n`;
+if(!list.length)return r+"Nothing logged yet.";
+list.forEach(e=>{r+=`- ${fmt(e.d)}: ${e.a}, ${e.m} min`;if(e.st)r+=`, ${e.st} steps`;if(e.pu)r+=`, ${e.pu} push-ups`;if(e.solo)r+=" [on my own]";if(e.n)r+=` (${e.n})`;r+="\n"});
+if(!onlyToday){const w=week();r+=`Total: ${new Set(w.map(e=>e.d)).size} days, ${w.reduce((s,e)=>s+e.m,0)} min. Streak: ${streak()} days. Solo days: ${new Set(w.filter(e=>e.solo).map(e=>e.d)).size}, solo streak ${streak(e=>e.solo)}.`;if(CHRIS&&S.goal)r+=`\nMy goal: ${S.goal.v} ${S.goal.t}/week.`}
+return r.trim()}
+async function send(onlyToday){const text=report(onlyToday);
+if(navigator.share){try{await navigator.share({text});return}catch(e){if(e.name==="AbortError")return}}
+if(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)){const sep=/iPhone|iPad|iPod/i.test(navigator.userAgent)?"&":"?";location.href="sms:"+sep+"body="+encodeURIComponent(text);return}
+try{await navigator.clipboard.writeText(text);alert("Copied! Paste it in a text to Mom.")}catch(e){prompt("Copy this and text it to Mom:",text)}}
+$("sendW").onclick=()=>send(false);$("sendT").onclick=()=>send(true);
+const SOLO=[["10-min walk loop","Walk",10],["Push-ups + plank set","Push-ups",5],["Bike loop","Bike",20],["Stretch routine","Stretching",10],["Shoot hoops / stickhandling","Sports",15]];
+SOLO.forEach(([a,act,m])=>{const b=document.createElement("button");b.className="chip";b.textContent=a;b.onclick=()=>{document.querySelectorAll("#chips .chip").forEach(c=>{if(c.textContent===act)c.click()});$("m").value=m;$("isSolo").checked=true;$("n").value=a;$("m").scrollIntoView({behavior:"smooth",block:"center"});flash("Go do it! Then tap Save ✅")};$("solo").appendChild(b)});
+$("sset").onclick=()=>{const v=+$("sv").value;if(!(v>0))return;S.solo={v,p:$("sp").value};save();render();flash("Solo target set!")};
+function renderSolo(w){$("ss").textContent=streak(e=>e.solo);const sd=new Set(w.filter(e=>e.solo).map(e=>e.d)).size;$("sw").textContent=sd;const t=S.solo;
+if(!t){$("stx").innerHTML='<span class="s">No target yet. Pick one you can do without anyone reminding you.</span>';return}$("sv").value=t.v;$("sp").value=t.p;
+const have=t.p==="day"?S.e.filter(e=>e.solo&&e.d===today()).reduce((s,e)=>s+e.m,0):sd;$("stx").innerHTML=`<b>Target:</b> ${have} / ${t.v} ${t.p==="day"?"solo minutes today":"solo days this week"}`+(have>=t.v?" — done! ✅":"")}
+$("gset").onclick=()=>{const v=+$("gv").value;if(!(v>0)){flash("Enter a goal amount");return}S.goal={v,t:$("gt").value};save();render();flash("Goal set: "+v+" "+S.goal.t)};
+$("pbadd").onclick=()=>{const n=$("pbn").value.trim(),v=$("pbv").value.trim();if(!n||!v)return;S.pb.unshift({id:Date.now(),d:today(),n,v});save();$("pbn").value=$("pbv").value="";render();flash("New personal best logged! 🏆")};
+function renderC(w){const g=S.goal;if(g){$("gv").value=g.v;$("gt").value=g.t;const have=g.t==="days"?new Set(w.map(e=>e.d)).size:w.reduce((s,e)=>s+e.m,0);
+$("goalTxt").innerHTML=`<b>Goal:</b> ${have} / ${g.v} ${g.t}`+(have>=g.v?" — goal hit! ✅":"")}else $("goalTxt").innerHTML='<span class="s">No goal set yet. Set one below if you want.</span>';
+$("pus").textContent=streak(e=>e.pu>0);$("puw").textContent=w.reduce((s,e)=>s+(e.pu||0),0);
+const byDay={};S.e.forEach(e=>{if(e.pu)byDay[e.d]=(byDay[e.d]||0)+e.pu});$("pub").textContent=Math.max(0,...Object.values(byDay));
+$("pbl").innerHTML=S.pb.length?"":'<tr><td colspan="4" class="s">No records yet.</td></tr>';
+S.pb.forEach(p=>{const tr=document.createElement("tr");tr.innerHTML=`<td>${fmt(p.d)}</td><td></td><td></td><td><button class="del">✕</button></td>`;tr.children[1].textContent=p.n;tr.children[2].textContent=p.v;tr.querySelector(".del").onclick=()=>{if(confirm("Remove?")){S.pb=S.pb.filter(x=>x.id!==p.id);save();render()}};$("pbl").appendChild(tr)})}
+render();
+</script></body></html>
