@@ -45,7 +45,7 @@ table{width:100%;border-collapse:collapse;font-size:14px}td,th{border:1px solid 
 <p class="s" style="text-align:center">Saved only on this phone. Have fun out there! 😄</p>
 </main><script>
 const KEY="pe_tracker_cam",CHRIS=false,NAME="Cam";
-const ACTS=["Walk","Bike","Tennis","Hike","Push-ups","Stretching","Sports","Skating / stick & puck","Other"];
+const ACTS=["Walk","Jump rope / jumping jacks","Tennis","Hike","Push-ups","Stretching","Sports","Skating / stick & puck","Other"];
 const $=id=>document.getElementById(id);
 let S=JSON.parse(localStorage.getItem(KEY)||"null")||{e:[],goal:null,pb:[]},act=null;
 const save=()=>localStorage.setItem(KEY,JSON.stringify(S));
@@ -81,7 +81,7 @@ if(navigator.share){try{await navigator.share({text});return}catch(e){if(e.name=
 if(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)){const sep=/iPhone|iPad|iPod/i.test(navigator.userAgent)?"&":"?";location.href="sms:"+sep+"body="+encodeURIComponent(text);return}
 try{await navigator.clipboard.writeText(text);alert("Copied! Paste it in a text to Mom.")}catch(e){prompt("Copy this and text it to Mom:",text)}}
 $("sendW").onclick=()=>send(false);$("sendT").onclick=()=>send(true);
-const SOLO=[["10-min walk loop","Walk",10],["Bike around the block","Bike",15],["Stretch & silly moves","Stretching",10],["Stickhandling in the driveway","Skating / stick & puck",15],["5 push-ups + 20-sec plank","Push-ups",5]];
+const SOLO=[["10-min walk loop","Walk",10],["Jumping jacks or jump rope, 5 min","Jump rope / jumping jacks",5],["Stretch & silly moves","Stretching",10],["Stickhandling in the driveway","Skating / stick & puck",15],["5 push-ups + 20-sec plank","Push-ups",5]];
 SOLO.forEach(([a,act,m])=>{const b=document.createElement("button");b.className="chip";b.textContent=a;b.onclick=()=>{document.querySelectorAll("#chips .chip").forEach(c=>{if(c.textContent===act)c.click()});$("m").value=m;$("isSolo").checked=true;$("n").value=a;$("m").scrollIntoView({behavior:"smooth",block:"center"});flash("Go do it! Then tap Save ✅")};$("solo").appendChild(b)});
 $("sset").onclick=()=>{const v=+$("sv").value;if(!(v>0))return;S.solo={v,p:$("sp").value};save();render();flash("Solo target set!")};
 function renderSolo(w){$("ss").textContent=streak(e=>e.solo);const sd=new Set(w.filter(e=>e.solo).map(e=>e.d)).size;$("sw").textContent=sd;const t=S.solo;
